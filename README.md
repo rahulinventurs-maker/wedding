@@ -2,7 +2,7 @@
 
 A full-stack wedding RSVP management platform. Admins create and manage events; guests RSVP via a public link and receive a QR code on confirmation.
 
-- **Live app** → https://thriving-tulumba-2cd1a1.netlify.app/login
+- **Live app** → https://verdant-speculoos-9d433e.netlify.app/login
 - **Backend API** → http://13.201.30.138:7777/api/docs/
 
 ---
@@ -71,7 +71,7 @@ ProjectInventurs/
 
 | Service | URL |
 |---------|-----|
-| Frontend (Netlify) | https://thriving-tulumba-2cd1a1.netlify.app |
+| Frontend (Netlify) | https://verdant-speculoos-9d433e.netlify.app |
 | Backend API (EC2) | http://13.201.30.138:7777 |
 | API Docs (Swagger) | http://13.201.30.138:7777/api/docs/ |
 
@@ -80,14 +80,14 @@ ProjectInventurs/
 ## Walkthrough on the live app
 
 ### 1. Register as admin
-Go to https://thriving-tulumba-2cd1a1.netlify.app/register
+Go to https://verdant-speculoos-9d433e.netlify.app/register
 
 Fill in:
 - Username, email, password
 - Role → **Admin**
 
 ### 2. Log in
-Go to https://thriving-tulumba-2cd1a1.netlify.app/login
+Go to https://verdant-speculoos-9d433e.netlify.app/login
 
 Use the credentials you just registered.
 
