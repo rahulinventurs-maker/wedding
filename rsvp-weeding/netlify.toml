@@ -1,0 +1,9 @@
+[build]
+  command = "npm run build"
+  publish = ".next"
+
+[build.environment]
+  NEXT_PUBLIC_API_URL = "http://13.201.30.138:7777/api"
+
+[[plugins]]
+  package = "@netlify/plugin-nextjs"
