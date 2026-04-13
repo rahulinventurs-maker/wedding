@@ -1,0 +1,85 @@
+networks:
+  occession-network:
+    driver: bridge
+    ipam:
+      config:
+        - subnet: 172.23.0.0/24
+          gateway: 172.23.0.1
+
+volumes:
+  postgres_data:
+  static_files:
+
+
+services:
+
+  # ── PostgreSQL ──────────────────────────────────────────────────────────────
+  postgres:
+    image: postgres:15
+    container_name: postgres
+    environment:
+      POSTGRES_DB:       RSVP_PLATFORM
+      POSTGRES_USER:     lucifer
+      POSTGRES_PASSWORD: password123
+      TZ:   UTC
+      PGTZ: UTC
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./init-scripts:/docker-entrypoint-initdb.d
+    networks:
+      occession-network:
+        ipv4_address: 172.23.0.20
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U lucifer -d RSVP_PLATFORM"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  # ── Django backend ──────────────────────────────────────────────────────────
+  backend:
+    build:
+      context: ./rsvp_project_backend
+      dockerfile: Dockerfile
+    container_name: rsvp-backend
+    environment:
+      DJANGO_SETTINGS_MODULE: config.settings
+      DATABASE_URL: postgresql://lucifer:password123@172.23.0.20:5432/RSVP_PLATFORM
+    ports:
+      - "7777:7777"
+    volumes:
+      - static_files:/app/staticfiles
+    networks:
+      occession-network:
+        ipv4_address: 172.23.0.10
+    depends_on:
+      postgres:
+        condition: service_healthy
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD-SHELL", "curl -f http://localhost:7777/api/schema/ || exit 1"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+
+
+  # ── Next.js frontend ────────────────────────────────────────────────────────
+  frontend:
+    build:
+      context: ./rsvp-weeding
+      dockerfile: Dockerfile
+    container_name: rsvp-frontend
+    environment:
+      NEXT_PUBLIC_API_URL: http://backend:7777/api
+    ports:
+      - "3000:3000"
+    networks:
+      occession-network:
+        ipv4_address: 172.23.0.30
+    depends_on:
+      backend:
+        condition: service_healthy
+    restart: unless-stopped
