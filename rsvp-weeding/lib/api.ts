@@ -3,7 +3,7 @@ import axios from 'axios';
 // All API calls go through this instance.
 // The base URL points to our Django backend.
 const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'http://127.0.0.1:7777/api',
+  baseURL: process.env.NEXT_PUBLIC_API_URL ?? 'http://13.201.30.138:7777/api',
   headers: { 'Content-Type': 'application/json' },
 });
 

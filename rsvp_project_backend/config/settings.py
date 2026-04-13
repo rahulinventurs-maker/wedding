@@ -5,6 +5,7 @@ from urllib.parse import urlparse
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
+
 def _parse_db_url(url: str) -> dict:
     p = urlparse(url)
     return {
@@ -16,11 +17,15 @@ def _parse_db_url(url: str) -> dict:
         'PORT':     str(p.port or 5432),
     }
 
-SECRET_KEY = 'django-insecure-whddcf7!3!xu@eeqw10im$=atr@mcxi01mboq+&ew@3kn^&ukl'
 
-DEBUG = True
+# ─────────────────────────────────────────
+# Core
+# ─────────────────────────────────────────
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-change-me-in-production')
 
-ALLOWED_HOSTS = ['*']
+DEBUG = os.environ.get('DEBUG', 'true').lower() == 'true'
+
+ALLOWED_HOSTS = os.environ.get('ALLOWED_HOSTS', '*').split(',')
 
 
 # ─────────────────────────────────────────
@@ -84,11 +89,11 @@ _db_url = os.environ.get('DATABASE_URL')
 DATABASES = {
     'default': _parse_db_url(_db_url) if _db_url else {
         'ENGINE':   'django.db.backends.postgresql',
-        'NAME':     'RSVP_PLATFORM',
-        'USER':     'lucifer',
-        'PASSWORD': 'password123',
-        'HOST':     '172.23.0.20',
-        'PORT':     '5432',
+        'NAME':     os.environ.get('DB_NAME',     'RSVP_PLATFORM'),
+        'USER':     os.environ.get('DB_USER',     'lucifer'),
+        'PASSWORD': os.environ.get('DB_PASSWORD', 'password123'),
+        'HOST':     os.environ.get('DB_HOST',     '172.23.0.20'),
+        'PORT':     os.environ.get('DB_PORT',     '5432'),
     }
 }
 
@@ -113,11 +118,11 @@ REST_FRAMEWORK = {
 # JWT — SimpleJWT
 # ─────────────────────────────────────────
 SIMPLE_JWT = {
-    'ACCESS_TOKEN_LIFETIME':  timedelta(hours=1),
-    'REFRESH_TOKEN_LIFETIME': timedelta(days=7),
-    'ROTATE_REFRESH_TOKENS':  True,
+    'ACCESS_TOKEN_LIFETIME':    timedelta(hours=1),
+    'REFRESH_TOKEN_LIFETIME':   timedelta(days=7),
+    'ROTATE_REFRESH_TOKENS':    True,
     'BLACKLIST_AFTER_ROTATION': True,
-    'AUTH_HEADER_TYPES': ('Bearer',),
+    'AUTH_HEADER_TYPES':        ('Bearer',),
 }
 
 
@@ -125,9 +130,9 @@ SIMPLE_JWT = {
 # drf-spectacular (Swagger / OpenAPI)
 # ─────────────────────────────────────────
 SPECTACULAR_SETTINGS = {
-    'TITLE': 'RSVP Platform API',
-    'DESCRIPTION': 'Wedding RSVP platform — Admin and Participant endpoints',
-    'VERSION': '1.0.0',
+    'TITLE':               'RSVP Platform API',
+    'DESCRIPTION':         'Wedding RSVP platform — Admin and Participant endpoints',
+    'VERSION':             '1.0.0',
     'SERVE_INCLUDE_SCHEMA': False,
 }
 
@@ -147,36 +152,25 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalisation
 # ─────────────────────────────────────────
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
-USE_I18N = True
-USE_TZ = True
+TIME_ZONE     = 'UTC'
+USE_I18N      = True
+USE_TZ        = True
 
 STATIC_URL  = 'static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 
 
 # ─────────────────────────────────────────
-# CORS — allow the Next.js frontend to call the API
+# CORS
 # ─────────────────────────────────────────
+CORS_ALLOW_ALL_ORIGINS = os.environ.get('CORS_ALLOW_ALL_ORIGINS', 'true').lower() == 'true'
 
-# Open for all origins in dev — lock this down in production
-CORS_ALLOW_ALL_ORIGINS = True
+_cors_origins = os.environ.get('CORS_ALLOWED_ORIGINS', '')
+if _cors_origins and not CORS_ALLOW_ALL_ORIGINS:
+    CORS_ALLOWED_ORIGINS = [o.strip() for o in _cors_origins.split(',')]
 
-CORS_ALLOW_METHODS = [
-    'DELETE',
-    'GET',
-    'OPTIONS',
-    'PATCH',
-    'POST',
-    'PUT',
-]
+CORS_ALLOW_METHODS = ['DELETE', 'GET', 'OPTIONS', 'PATCH', 'POST', 'PUT']
 
-CORS_ALLOW_HEADERS = [
-    'accept',
-    'authorization',
-    'content-type',
-    'x-csrftoken',
-]
+CORS_ALLOW_HEADERS = ['accept', 'authorization', 'content-type', 'x-csrftoken']
 
-# Keep preflight cache short in dev so method changes take effect immediately
-CORS_PREFLIGHT_MAX_AGE = 1
+CORS_PREFLIGHT_MAX_AGE = int(os.environ.get('CORS_PREFLIGHT_MAX_AGE', '1'))
