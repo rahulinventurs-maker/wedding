@@ -7,7 +7,12 @@ import {
   PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   LineChart, Line,
+  type ValueType,
 } from 'recharts';
+
+const fmtGuests = (v: ValueType | undefined) => [`${v ?? 0} guests`, ''] as [string, string];
+const fmtCount  = (v: ValueType | undefined) => [`${v ?? 0} guests`, 'Count'] as [string, string];
+const fmtRsvps  = (v: ValueType | undefined) => [`${v ?? 0} RSVPs`, ''] as [string, string];
 import { analyticsApi, eventsApi } from '../../../../../lib/endpoints';
 
 interface Analytics {
@@ -171,7 +176,7 @@ export default function AnalyticsPage() {
                 </Pie>
                 <Tooltip
                   contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid var(--border)' }}
-                  formatter={(v: number) => [`${v} guests`, '']}
+                  formatter={fmtGuests}
                 />
                 <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 12 }} />
               </PieChart>
@@ -200,7 +205,7 @@ export default function AnalyticsPage() {
                 </Pie>
                 <Tooltip
                   contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid var(--border)' }}
-                  formatter={(v: number) => [`${v} guests`, '']}
+                  formatter={fmtGuests}
                 />
                 <Legend iconType="circle" iconSize={8} wrapperStyle={{ fontSize: 12 }} />
               </PieChart>
@@ -231,7 +236,7 @@ export default function AnalyticsPage() {
               />
               <Tooltip
                 contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid var(--border)' }}
-                formatter={(v: number) => [`${v} guests`, 'Count']}
+                formatter={fmtCount}
               />
               <Bar dataKey="count" radius={[4, 4, 0, 0]}>
                 {data.dietary.map((_, i) => (
@@ -265,7 +270,7 @@ export default function AnalyticsPage() {
               />
               <Tooltip
                 contentStyle={{ fontSize: 12, borderRadius: 8, border: '1px solid var(--border)' }}
-                formatter={(v: number) => [`${v} RSVPs`, '']}
+                formatter={fmtRsvps}
               />
               <Line
                 type="monotone"
