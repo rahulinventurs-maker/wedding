@@ -7,12 +7,11 @@ import {
   PieChart, Pie, Cell, Tooltip, Legend, ResponsiveContainer,
   BarChart, Bar, XAxis, YAxis, CartesianGrid,
   LineChart, Line,
-  type ValueType,
 } from 'recharts';
 
-const fmtGuests = (v: ValueType | undefined) => [`${v ?? 0} guests`, ''] as [string, string];
-const fmtCount  = (v: ValueType | undefined) => [`${v ?? 0} guests`, 'Count'] as [string, string];
-const fmtRsvps  = (v: ValueType | undefined) => [`${v ?? 0} RSVPs`, ''] as [string, string];
+const fmtGuests = (v: number | string | undefined) => [`${v ?? 0} guests`, ''] as [string, string];
+const fmtCount  = (v: number | string | undefined) => [`${v ?? 0} guests`, 'Count'] as [string, string];
+const fmtRsvps  = (v: number | string | undefined) => [`${v ?? 0} RSVPs`, ''] as [string, string];
 import { analyticsApi, eventsApi } from '../../../../../lib/endpoints';
 
 interface Analytics {
