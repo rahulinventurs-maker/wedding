@@ -3,7 +3,7 @@
   publish = ".next"
 
 [build.environment]
-  NEXT_PUBLIC_API_URL = "http://13.201.30.138:7777/api"
+  NEXT_PUBLIC_API_URL = "https://13.201.30.138/api"
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
