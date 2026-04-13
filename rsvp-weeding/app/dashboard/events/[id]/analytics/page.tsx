@@ -9,9 +9,12 @@ import {
   LineChart, Line,
 } from 'recharts';
 
-const fmtGuests = (v: number | string | undefined) => [`${v ?? 0} guests`, ''] as [string, string];
-const fmtCount  = (v: number | string | undefined) => [`${v ?? 0} guests`, 'Count'] as [string, string];
-const fmtRsvps  = (v: number | string | undefined) => [`${v ?? 0} RSVPs`, ''] as [string, string];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fmtGuests = (v: any) => [`${v ?? 0} guests`, ''] as [string, string];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fmtCount  = (v: any) => [`${v ?? 0} guests`, 'Count'] as [string, string];
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+const fmtRsvps  = (v: any) => [`${v ?? 0} RSVPs`, ''] as [string, string];
 import { analyticsApi, eventsApi } from '../../../../../lib/endpoints';
 
 interface Analytics {
