@@ -3,7 +3,13 @@
   publish = ".next"
 
 [build.environment]
-  NEXT_PUBLIC_API_URL = "https://13.201.30.138/api"
+  NEXT_PUBLIC_API_URL = "/api-proxy"
+
+[[redirects]]
+  from   = "/api-proxy/*"
+  to     = "http://13.201.30.138:7777/api/:splat"
+  status = 200
+  force  = true
 
 [[plugins]]
   package = "@netlify/plugin-nextjs"
